@@ -86,7 +86,7 @@ int parse_cli(int argc, char **argv, Command *cmd) {
         {"shell",     required_argument, 0, 'S'},
         {"os",        required_argument, 0, 'O'},
         {"type",      required_argument, 0, 'T'},
-        {"proto",     required_argument, 0, 'p'},
+        {"proto",     required_argument, 0, 'R'},
         {"lang",      required_argument, 0, 'L'},
         {"encoding",  required_argument, 0, 'e'},
         {"no-color",  no_argument,       0, 1000},
@@ -135,7 +135,7 @@ int parse_cli(int argc, char **argv, Command *cmd) {
         optind = 2;
     }
 
-    while ((c = getopt_long(argc, argv, "i:s:H:P:S:O:T:p:L:e:hl", long_options, &option_index)) != -1) {
+    while ((c = getopt_long(argc, argv, "i:s:H:P:S:O:T:R:L:e:hlp", long_options, &option_index)) != -1) {
         switch (c) {
             case 'S':
                 if (cmd->shell) free(cmd->shell);
@@ -168,13 +168,12 @@ int parse_cli(int argc, char **argv, Command *cmd) {
                 if (cmd->type) free(cmd->type);
                 cmd->type = strdup(optarg);
                 break;
+            case 'R':
+                if (cmd->proto) free(cmd->proto);
+                cmd->proto = strdup(optarg);
+                break;
             case 'p':
-                if (optarg) {
-                    if (cmd->proto) free(cmd->proto);
-                    cmd->proto = strdup(optarg);
-                } else {
-                    cmd->only_payload = 1;
-                }
+                cmd->only_payload = 1;
                 break;
             case 'L':
                 if (cmd->lang) free(cmd->lang);

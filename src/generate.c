@@ -153,32 +153,53 @@ void generate_command(ModuleRegistry* registry, const char* shell_id, const char
         return;
     }
 
-    if (cmd && cmd->only_payload) {
+    if (cmd && cmd->only_payload && cmd->only_listener) {
+        // Print both payload and listener
         printf("%s\n", encoded);
-    } else {
-        printf("%s\n", COLORIZE(COLOR_BOLD COLOR_GREEN, "Generated payload:"));
+        if (mod->listener_count > 0) {
+            char* listener = generate_listener(mod, mod->listeners[0].name, lport);
+            if (listener) {
+                printf("%s\n", listener);
+                free(listener);
+            }
+        }
+        free(payload);
+        free(final_payload);
+        free(encoded);
+        return;
+    } else if (cmd && cmd->only_listener) {
+        if (mod->listener_count > 0) {
+            char* listener = generate_listener(mod, mod->listeners[0].name, lport);
+            if (listener) {
+                printf("%s\n", listener);
+                free(listener);
+            }
+        }
+        free(payload);
+        free(final_payload);
+        free(encoded);
+        return;
+    } else if (cmd && cmd->only_payload) {
         printf("%s\n", encoded);
+        free(payload);
+        free(final_payload);
+        free(encoded);
+        return;
     }
+    printf("%s\n", COLORIZE(COLOR_BOLD COLOR_GREEN, "Generated payload:"));
+    printf("%s\n", encoded);
 
     free(payload);
     free(final_payload);
     free(encoded);
 
     if (mod->listener_count > 0) {
-        if (cmd && cmd->only_listener) {
-            char* listener = generate_listener(mod, mod->listeners[0].name, lport);
+        printf("\n%s\n", COLORIZE(COLOR_BOLD COLOR_CYAN, "Available listeners:"));
+        for (int i = 0; i < mod->listener_count; i++) {
+            char* listener = generate_listener(mod, mod->listeners[i].name, lport);
             if (listener) {
-                printf("%s\n", listener);
+                printf("  %s: %s\n", mod->listeners[i].name, listener);
                 free(listener);
-            }
-        } else if (!(cmd && cmd->only_payload)) {
-            printf("\n%s\n", COLORIZE(COLOR_BOLD COLOR_CYAN, "Available listeners:"));
-            for (int i = 0; i < mod->listener_count; i++) {
-                char* listener = generate_listener(mod, mod->listeners[i].name, lport);
-                if (listener) {
-                    printf("  %s: %s\n", mod->listeners[i].name, listener);
-                    free(listener);
-                }
             }
         }
     }

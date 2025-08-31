@@ -11,7 +11,7 @@ char *get_shells_dir_relative_to_exe(const char *exe_path);
 void list_command(ModuleRegistry* registry, const char* os, const char* type, const char* proto, const char* lang);
 void search_command(ModuleRegistry* registry, const char* term);
 void show_command(ModuleRegistry* registry, const char* shell_id);
-void generate_command(ModuleRegistry* registry, const char* shell_id, const char* lhost, int lport, const char* encoding, const char* shell_override);
+void generate_command(ModuleRegistry* registry, const char* shell_id, const char* lhost, int lport, const char* encoding, const char* shell_override, const Command* cmd);
 
 
 
@@ -63,7 +63,7 @@ int main(int argc, char **argv) {
     } else if (strcmp(cmd.command, "show") == 0) {
         show_command(registry, cmd.shell_id);
     } else if (strcmp(cmd.command, "generate") == 0) {
-        generate_command(registry, cmd.shell_id, cmd.lhost, cmd.lport, cmd.encoding, cmd.shell);
+    generate_command(registry, cmd.shell_id, cmd.lhost, cmd.lport, cmd.encoding, cmd.shell, &cmd);
     }
 
     registry_destroy(registry);
