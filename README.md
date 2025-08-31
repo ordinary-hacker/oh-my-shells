@@ -4,9 +4,15 @@
 
 The offline, CLI-first swiss army knife for shell payloads! 🚀
 
-[![Version](https://img.shields.io/badge/version-v0.0.1-blue.svg)](#)
+[![Version](https://img.shields.io/badge/version-v0.0.2-blue.svg)](#)
 
 </div>
+
+---
+
+## ❓ Why, What, How?
+
+To learn about why use this tool, and overview of what it is, and how it works, you can read my little article about it [here](https://0rd1n4ry.bearblog.dev/oh-my-shells).
 
 ---
 
