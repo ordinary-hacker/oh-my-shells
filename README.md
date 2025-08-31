@@ -4,7 +4,7 @@
 
 The offline, CLI-first swiss army knife for shell payloads! 🚀
 
-[![Version](https://img.shields.io/badge/version-v1.0.0-blue.svg)](#)
+[![Version](https://img.shields.io/badge/version-v0.0.1-blue.svg)](#)
 
 </div>
 
