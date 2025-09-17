@@ -1,3 +1,65 @@
+#include <ifaddrs.h>
+#include <arpa/inet.h>
+#include <net/if.h>
+#include <ctype.h>
+#include <string.h>    // for strlen, strcmp, strdup
+#include <sys/types.h> // for getifaddrs
+#include <sys/socket.h> // for sockaddr
+#include <netdb.h>     // for getnameinfo, NI_MAXHOST, NI_NUMERICHOST
+#include <unistd.h>
+
+// Returns 1 if valid IPv4 or IPv6, 0 otherwise
+int is_valid_ip(const char* str) {
+    struct in_addr addr4;
+    struct in6_addr addr6;
+    return inet_pton(AF_INET, str, &addr4) == 1 || inet_pton(AF_INET6, str, &addr6) == 1;
+}
+
+// Returns 1 if valid domain (contains at least one dot, only valid chars, not starting/ending with dot)
+int is_valid_domain(const char* str) {
+    int len = strlen(str);
+    if (len < 1 || str[0] == '.' || str[len-1] == '.') return 0;
+    int dot = 0;
+    for (int i = 0; i < len; i++) {
+        if (str[i] == '.') dot = 1;
+        else if (!isalnum(str[i]) && str[i] != '-' && str[i] != '_') return 0;
+    }
+    return dot;
+}
+
+// Returns 1 if valid interface name (no dots, not empty, alnum/_ only)
+int is_valid_interface(const char* str) {
+    int len = strlen(str);
+    if (len < 1) return 0;
+    for (int i = 0; i < len; i++) {
+        if (str[i] == '.') return 0;
+        if (!isalnum(str[i]) && str[i] != '_') return 0;
+    }
+    return 1;
+}
+
+// Returns malloc'd string with IP of interface, or NULL
+char* get_ip_from_interface(const char* ifname) {
+    struct ifaddrs *ifaddr, *ifa;
+    char host[NI_MAXHOST];
+    if (getifaddrs(&ifaddr) == -1) return NULL;
+    char* result = NULL;
+    for (ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next) {
+        if (ifa->ifa_addr == NULL) continue;
+        if (strcmp(ifa->ifa_name, ifname) != 0) continue;
+        int family = ifa->ifa_addr->sa_family;
+        if (family == AF_INET || family == AF_INET6) {
+            if (getnameinfo(ifa->ifa_addr,
+                            (family == AF_INET) ? sizeof(struct sockaddr_in) : sizeof(struct sockaddr_in6),
+                            host, NI_MAXHOST, NULL, 0, NI_NUMERICHOST) == 0) {
+                result = strdup(host);
+                break;
+            }
+        }
+    }
+    freeifaddrs(ifaddr);
+    return result;
+}
 
 #include "../include/module_loader.h"
 #include "../include/generate.h"
@@ -83,6 +145,9 @@ void generate_command(ModuleRegistry* registry, const char* shell_id, const char
         return;
     }
 
+
+    char lhost_buf[256] = {0};
+    const char* lhost_final = lhost;
     if (!mod->is_webshell) {
         if (!lhost || strlen(lhost) == 0) {
             printf("%s\n", COLORIZE(COLOR_BOLD COLOR_RED, "Error: LHOST is required for this payload (not a webshell)."));
@@ -90,6 +155,28 @@ void generate_command(ModuleRegistry* registry, const char* shell_id, const char
         }
         if (lport <= 0 || lport > 65535) {
             printf("%s\n", COLORIZE(COLOR_BOLD COLOR_RED, "Error: LPORT must be between 1 and 65535."));
+            return;
+        }
+
+        // LHOST processing
+        if (is_valid_ip(lhost)) {
+            // Valid IP, use as is
+            lhost_final = lhost;
+        } else if (is_valid_domain(lhost)) {
+            // Valid domain, use as is
+            lhost_final = lhost;
+        } else if (is_valid_interface(lhost)) {
+            char* ip = get_ip_from_interface(lhost);
+            if (!ip) {
+                printf("%s\n", COLORIZE(COLOR_BOLD COLOR_RED, "Error: Could not resolve IP for interface name as LHOST."));
+                return;
+            }
+            strncpy(lhost_buf, ip, sizeof(lhost_buf)-1);
+            free(ip);
+            lhost_final = lhost_buf;
+            printf("%s %s -> %s\n", COLORIZE(COLOR_BOLD COLOR_YELLOW, "Info: LHOST interface"), lhost, lhost_final);
+        } else {
+            printf("%s\n", COLORIZE(COLOR_BOLD COLOR_RED, "Error: LHOST is not a valid IP, domain, or interface name."));
             return;
         }
     }
@@ -126,7 +213,7 @@ void generate_command(ModuleRegistry* registry, const char* shell_id, const char
     if (mod->is_webshell) {
         payload = generate_payload(mod, "", 0);
     } else {
-        payload = generate_payload(mod, lhost, lport);
+        payload = generate_payload(mod, lhost_final, lport);
     }
     if (!payload) {
         printf("%s\n", COLORIZE(COLOR_BOLD COLOR_RED, "Failed to generate payload."));
