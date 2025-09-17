@@ -45,8 +45,8 @@ void print_help(const char *program_name) {
     printf("%s\n", COLORIZE(COLOR_BOLD COLOR_CYAN, "OPTIONS"));
     printf("  -i, --id <shell_id>        Shell identifier\n");
     printf("  -s, --search <term>        Search term\n");
-    printf("  -H, --lhost <host>         Local host for payload generation\n");
-    printf("  -P, --lport <port>         Local port for payload generation (default: 4444)\n");
+    printf("  -H, --lhost <host>         Local host for payload generation (required except for webshells)\n");
+    printf("  -P, --lport <port>         Local port for payload generation (default: 4444, required except for webshells)\n");
     printf("  -S, --shell <shell>        Shell to use for payloads (must be compatible)\n");
     printf("  -e, --encoding <type>      Output encoding (url, double-url, base64, base32, none)\n");
     printf("  -l, --listener             Output only the recommended listener command for the payload\n");
@@ -204,10 +204,8 @@ int parse_cli(int argc, char **argv, Command *cmd) {
             fprintf(stderr, "Error: 'generate' command requires a shell_id\n");
             return -1;
         }
-        if (!cmd->lhost) {
-            fprintf(stderr, "Error: 'generate' command requires --lhost\n");
-            return -1;
-        }
+        // LHOST/LPORT are required except for webshells (is_webshell = true)
+        // We can't check is_webshell here (no module loaded yet), so defer check to generate_command
     } else if (strcmp(cmd->command, "show") == 0) {
         if (!cmd->shell_id) {
             fprintf(stderr, "Error: 'show' command requires a shell_id\n");

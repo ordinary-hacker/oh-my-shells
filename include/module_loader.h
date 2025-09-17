@@ -33,6 +33,8 @@ typedef struct {
     char **compatible_shells;
     int compatible_shell_count;
     char default_shell[128];
+
+    int is_webshell; // 1 if is_webshell = true in TOML, 0 otherwise
 } ShellModule;
 
 typedef struct {

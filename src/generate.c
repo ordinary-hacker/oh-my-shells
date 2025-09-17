@@ -76,10 +76,22 @@ void generate_command(ModuleRegistry* registry, const char* shell_id, const char
     extern int no_color;
     if (cmd) no_color = cmd->no_color;
     ShellModule* mod = find_module_by_id(registry, shell_id);
+
     if (!mod) {
         printf("%s\n", COLORIZE(COLOR_BOLD COLOR_RED, "Shell not found:"));
         printf("%s\n", shell_id);
         return;
+    }
+
+    if (!mod->is_webshell) {
+        if (!lhost || strlen(lhost) == 0) {
+            printf("%s\n", COLORIZE(COLOR_BOLD COLOR_RED, "Error: LHOST is required for this payload (not a webshell)."));
+            return;
+        }
+        if (lport <= 0 || lport > 65535) {
+            printf("%s\n", COLORIZE(COLOR_BOLD COLOR_RED, "Error: LPORT must be between 1 and 65535."));
+            return;
+        }
     }
 
     const char* shell_to_use = NULL;
@@ -110,7 +122,12 @@ void generate_command(ModuleRegistry* registry, const char* shell_id, const char
     } else if (mod->default_shell[0]) {
         shell_to_use = mod->default_shell;
     }
-    char* payload = generate_payload(mod, lhost, lport);
+    char* payload = NULL;
+    if (mod->is_webshell) {
+        payload = generate_payload(mod, "", 0);
+    } else {
+        payload = generate_payload(mod, lhost, lport);
+    }
     if (!payload) {
         printf("%s\n", COLORIZE(COLOR_BOLD COLOR_RED, "Failed to generate payload."));
         return;

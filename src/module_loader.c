@@ -102,6 +102,13 @@ int parse_toml_module(const char* filepath, ShellModule* module) {
     }
 
     memset(module, 0, sizeof(ShellModule));
+    module->is_webshell = 0;
+    toml_datum_t webshell_datum = toml_seek(result.toptab, "is_webshell");
+    if (webshell_datum.type == TOML_BOOLEAN) {
+        module->is_webshell = webshell_datum.u.boolean ? 1 : 0;
+    } else {
+        module->is_webshell = 0;
+    }
 
     toml_datum_t data;
 

