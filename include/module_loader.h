@@ -7,6 +7,10 @@
 #include <dirent.h>
 #include <sys/stat.h>
 
+#ifdef __sun
+#include <sys/types.h>
+#endif
+
 #define MAX_PATH_LEN 512
 #define MAX_STRING_LEN 1024
 #define MAX_LISTENERS 32

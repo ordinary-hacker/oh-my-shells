@@ -98,6 +98,9 @@ Just run the following command, note you need to have `make` installed:
 curl -fsSL https://raw.githubusercontent.com/ordinary-hacker/oh-my-shells/trunk/install.sh | sudo bash
 ```
 
+Or, otherwise you can use one of the precompiled binaries available at `release/builds/` and in the latest release.
+Just make sure you have both the binary and the `shells/` directory in the same directory. The latest release also contains a `.zip` and `.tar.gz` of the `shells/` directory for easier install.
+
 Afterwards you can just run the tool as:
 
 ```sh

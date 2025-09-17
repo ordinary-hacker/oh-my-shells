@@ -1,3 +1,7 @@
+#define _POSIX_C_SOURCE 200809L
+#define _DEFAULT_SOURCE
+#define _GNU_SOURCE
+#define _BSD_SOURCE
 #include <unistd.h>
 #include <limits.h>
 #include <stdlib.h>
@@ -6,11 +10,23 @@
 #include "../include/module_loader.h"
 #include "../lib/tomlc17/src/tomlc17.h"
 
+#ifndef PATH_MAX
+#define PATH_MAX 4096
+#endif
+
 char *get_shells_dir_relative_to_exe(const char *exe_path) {
     char resolved[PATH_MAX];
     char *dir_end;
     if (!exe_path) return NULL;
+    
+#ifdef __NetBSD__
+    // NetBSD fallback - use exe_path directly if realpath unavailable
+    strncpy(resolved, exe_path, PATH_MAX - 1);
+    resolved[PATH_MAX - 1] = '\0';
+#else
     if (realpath(exe_path, resolved) == NULL) return NULL;
+#endif
+    
     dir_end = strrchr(resolved, '/');
     if (!dir_end) return NULL;
     *dir_end = '\0';

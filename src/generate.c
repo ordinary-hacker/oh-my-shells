@@ -1,12 +1,22 @@
+#define _POSIX_C_SOURCE 200809L
+#define _DEFAULT_SOURCE
 #include <ifaddrs.h>
 #include <arpa/inet.h>
+#include <netinet/in.h>
 #include <net/if.h>
 #include <ctype.h>
-#include <string.h>    // for strlen, strcmp, strdup
-#include <sys/types.h> // for getifaddrs
-#include <sys/socket.h> // for sockaddr
-#include <netdb.h>     // for getnameinfo, NI_MAXHOST, NI_NUMERICHOST
+#include <string.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netdb.h>
 #include <unistd.h>
+
+#ifndef NI_MAXHOST
+#define NI_MAXHOST 1025
+#endif
+#ifndef NI_NUMERICHOST
+#define NI_NUMERICHOST 1
+#endif
 
 // Returns 1 if valid IPv4 or IPv6, 0 otherwise
 int is_valid_ip(const char* str) {
