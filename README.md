@@ -4,7 +4,7 @@
 
 The offline, CLI-first swiss army knife for shell payloads! 🚀
 
-[![Version](https://img.shields.io/badge/version-v0.0.2-blue.svg)](#)
+[![Version](https://img.shields.io/badge/version-v0.0.4-blue.svg)](#)
 
 </div>
 
@@ -36,10 +36,10 @@ To learn about why use this tool, and overview of what it is, and how it works, 
 
 ### Commands
 
-- `list` — List payloads with optional filters
-- `search <term>` — Search for payloads
-- `show <shell_id>` — Show details about a specific payload
-- `generate <shell_id>` — Generate a payload
+- `list` (alias: `l`) — List payloads with optional filters
+- `search <term>` (alias: `sr`) — Search for payloads
+- `show <shell_id>` (alias: `sh`) — Show details about a specific payload
+- `generate <shell_id>` (alias: `g`) — Generate a payload
 
 ### Options
 
@@ -68,9 +68,13 @@ To learn about why use this tool, and overview of what it is, and how it works, 
 
 ```sh
 ./oh-my-shell list --os linux --type reverse
+./oh-my-shell l --os linux --type reverse    # Using alias
 ./oh-my-shell search "netcat"
+./oh-my-shell sr "netcat"                    # Using alias
 ./oh-my-shell show bash_read_line
+./oh-my-shell sh bash_read_line              # Using alias
 ./oh-my-shell generate bash_i -H 192.168.1.100 -P 4444
+./oh-my-shell g bash_i -H 192.168.1.100 -P 4444  # Using alias
 ./oh-my-shell --version
 ```
 

@@ -36,13 +36,13 @@ void print_help(const char *program_name) {
     printf("    %s <command> [OPTIONS]\n\n", program_name);
 
     printf("%s\n", COLORIZE(COLOR_BOLD COLOR_CYAN, "COMMANDS"));
-    printf("  %s\n", COLORIZE(COLOR_BOLD COLOR_YELLOW, "list"));
+    printf("  %s\n", COLORIZE(COLOR_BOLD COLOR_YELLOW, "list, l"));
     printf("      List payloads with optional filters\n");
-    printf("  %s\n", COLORIZE(COLOR_BOLD COLOR_YELLOW, "search <term>"));
+    printf("  %s\n", COLORIZE(COLOR_BOLD COLOR_YELLOW, "search, sr <term>"));
     printf("      Search for payloads\n");
-    printf("  %s\n", COLORIZE(COLOR_BOLD COLOR_YELLOW, "show <shell_id>"));
+    printf("  %s\n", COLORIZE(COLOR_BOLD COLOR_YELLOW, "show, sh <shell_id>"));
     printf("      Show details about a specific payload\n");
-    printf("  %s\n", COLORIZE(COLOR_BOLD COLOR_YELLOW, "generate <shell_id>"));
+    printf("  %s\n", COLORIZE(COLOR_BOLD COLOR_YELLOW, "generate, g <shell_id>"));
     printf("      Generate a payload\n\n");
 
     printf("%s\n", COLORIZE(COLOR_BOLD COLOR_CYAN, "OPTIONS"));
@@ -74,10 +74,10 @@ void print_help(const char *program_name) {
 }
 
 int is_valid_command(const char *cmd) {
-    return (strcmp(cmd, "list") == 0 ||
-            strcmp(cmd, "search") == 0 ||
-            strcmp(cmd, "show") == 0 ||
-            strcmp(cmd, "generate") == 0);
+    return (strcmp(cmd, "list") == 0 || strcmp(cmd, "l") == 0 ||
+            strcmp(cmd, "search") == 0 || strcmp(cmd, "sr") == 0 ||
+            strcmp(cmd, "show") == 0 || strcmp(cmd, "sh") == 0 ||
+            strcmp(cmd, "generate") == 0 || strcmp(cmd, "g") == 0);
 }
 
 int parse_cli(int argc, char **argv, Command *cmd) {
@@ -121,7 +121,18 @@ int parse_cli(int argc, char **argv, Command *cmd) {
         return -1;
     }
 
-    cmd->command = strdup(argv[1]);
+    // Normalize aliases to full command names
+    if (strcmp(argv[1], "l") == 0) {
+        cmd->command = strdup("list");
+    } else if (strcmp(argv[1], "sr") == 0) {
+        cmd->command = strdup("search");
+    } else if (strcmp(argv[1], "sh") == 0) {
+        cmd->command = strdup("show");
+    } else if (strcmp(argv[1], "g") == 0) {
+        cmd->command = strdup("generate");
+    } else {
+        cmd->command = strdup(argv[1]);
+    }
 
     if ((strcmp(cmd->command, "search") == 0 ||
          strcmp(cmd->command, "show") == 0 ||

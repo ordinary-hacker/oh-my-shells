@@ -86,7 +86,7 @@ char* encode_url(const char* input) {
     char* p = out;
     for (size_t i = 0; i < len; i++) {
         unsigned char c = (unsigned char)input[i];
-        if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || c == '-' || c == '_' || c == '.' || c == '~') {
+        if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || c == '_' || c == '~') {
             *p++ = c;
         } else {
             *p++ = '%';
