@@ -1,0 +1,18 @@
+name: Package Shells
+
+on:
+  push:
+    paths:
+      - "shells/**"
+  pull_request:
+    paths:
+      - "shells/**"
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run packaging script
+        run: ./scripts/package_shells.sh

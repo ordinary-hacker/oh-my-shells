@@ -1,0 +1,27 @@
+name: Generate Precompiled
+
+on:
+  push:
+    paths:
+      - "src/**"
+      - "include/**"
+      - "lib/**"
+  pull_request:
+    paths:
+      - "src/**"
+      - "include/**"
+      - "lib/**"
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Zig
+        run: |
+          sudo apt update
+          sudo apt install -y zig
+
+      - name: Run build script
+        run: ./scripts/generate_precompiled.sh

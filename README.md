@@ -99,7 +99,7 @@ make
 Just run the following command, note you need to have `make` installed:
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/ordinary-hacker/oh-my-shells/trunk/install.sh | sudo bash
+curl -fsSL https://raw.githubusercontent.com/ordinary-hacker/oh-my-shells/trunk/scripts/install.sh | sudo bash
 ```
 
 Or, otherwise you can use one of the precompiled binaries available at `release/builds/` and in the latest release.
@@ -110,6 +110,14 @@ Afterwards you can just run the tool as:
 ```sh
 oh-my-shells -h
 ```
+
+---
+
+## ©️ Credits
+
+**Author and maintainer**: [ordinary-hacker](https://github.com/ordinary-hacker)
+
+This tool depends on and includes a vendored version of [tomlc17](https://github.com/cktan/tomlc17) by [cktan](https://github.com/cktan).
 
 ---
 
