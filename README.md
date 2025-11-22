@@ -113,11 +113,71 @@ oh-my-shells -h
 
 ---
 
+## 🧪 Testing
+
+A comprehensive amount of tests is available in `tests/` for this tool, all of them using the [Unity Test Framework](https://github.com/ThrowTheSwitch/Unity) at `lib/unity/`.
+
+Here's a look at the structure of tests:
+* **White Box Tests (Unit Tests)**
+  - `test_cli.c`: Tests CLI arguments parsing and command structure initialization
+  - `test_module_loader.c`: Tests module loading, registry management, and TOML parsing
+* **Integration Tests**
+  - `test_integration.c`: Tests complete workflows and component interactions
+* **Black Box Tests**
+  - `test_blackbox.c`: Tests the binary as an external user would, testing all commands and edge cases
+
+### Running Tests
+
+Running all tests:
+```bash
+make test
+```
+
+Running individual test suites:
+```bash
+make run-test-cli
+make run-test-module-loader
+make run-test-integration
+make run-test-blackbox
+```
+
+Building tests without running them:
+```bash
+make build-tests
+```
+
+### Tests Coverage
+
+The whole test suite covers:
+- CLI argument parsing and validation
+- Module registry initialization and management
+- TOML file loading and parsing
+- Shell module search and filtering
+- Payload generation functionality
+- All command-line commands (list, search, show, generate)
+- Error handling and edge cases
+- Command aliases and flag combinations
+- Integration between components
+
+### Expected Results
+
+These tests should always pass with 0 failures. In total the test suite includes:
+- 8 CLI tests
+- 5 Module loader tests
+- 6 Integration tests
+- 13 Black box tests
+
+Giving us a **total of 32 tests**.
+
+---
+
 ## ©️ Credits
 
 **Author and maintainer**: [ordinary-hacker](https://github.com/ordinary-hacker)
 
 This tool depends on and includes a vendored version of [tomlc17](https://github.com/cktan/tomlc17) by [cktan](https://github.com/cktan).
+
+THere's also a vendored version of the [Unity Test Framework](https://github.com/ThrowTheSwitch/Unity) by [ThrowTheSwitch](https://github.com/ThrowTheSwitch) used for testing.
 
 ---
 

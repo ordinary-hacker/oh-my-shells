@@ -1,1 +1,3 @@
 oh-my-shells
+test_*
+!test_*.c
