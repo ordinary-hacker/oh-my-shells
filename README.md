@@ -5,6 +5,9 @@
 The offline, CLI-first swiss army knife for shell payloads! 🚀
 
 [![Version](https://img.shields.io/badge/version-v0.0.4-blue.svg)](#)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](#)
+[![Language](https://img.shields.io/badge/language-C-cyan)](#)
+[![Downloads](https://img.shields.io/github/downloads/ordinary-hacker/oh-my-shells/total.svg)](#)
 
 </div>
 
@@ -12,7 +15,7 @@ The offline, CLI-first swiss army knife for shell payloads! 🚀
 
 ## ❓ Why, What, How?
 
-To learn about why use this tool, and overview of what it is, and how it works, you can read my little article about it [here](https://0rd1n4ry.bearblog.dev/oh-my-shells).
+For a quick overview of what the tool does, how it works, and why it exists, see [this blog post](https://0rd1n4ry.bearblog.dev/oh-my-shells).
 
 ---
 
@@ -88,6 +91,8 @@ Just drop a new `.toml` file in the appropriate `shells/` subdirectory. The tool
 
 ## 🛠️ Building
 
+**Requires**: `make` and any C compiler (e.g. `gcc`, `clang`, `cc`, ...).
+
 ```sh
 make
 ```
@@ -96,16 +101,22 @@ make
 
 ## 📥 Installing & Updating
 
-Just run the following command, note you need to have `make` installed:
+### Installer Script
+
+Just run the following command, note you need to have `make` and a C compiler installed:
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/ordinary-hacker/oh-my-shells/trunk/scripts/install.sh | sudo bash
 ```
 
-Or, otherwise you can use one of the precompiled binaries available at `release/builds/` and in the latest release.
-Just make sure you have both the binary and the `shells/` directory in the same directory. The latest release also contains a `.zip` and `.tar.gz` of the `shells/` directory for easier install.
+### Prebuilt Binaries
 
-Afterwards you can just run the tool as:
+Or, otherwise you can use one of the precompiled binaries available at `release/builds/` and in the latest release.
+Just make sure you have both the binary and the `shells/` directory in the same folder. The latest release also contains a `.zip` and `.tar.gz` of the `shells/` directory for easier install.
+
+### Verify installation
+
+Afterwards, no matter the method of installation,  you can just run the tool as:
 
 ```sh
 oh-my-shells -h
@@ -115,7 +126,9 @@ oh-my-shells -h
 
 ## 🧪 Testing
 
-A comprehensive amount of tests is available in `tests/` for this tool, all of them using the [Unity Test Framework](https://github.com/ThrowTheSwitch/Unity) at `lib/unity/`.
+The project includes a full suite of unit, integration, and black-box tests.
+
+This comprehensive amount of tests is available in `tests/`, all of them using the [Unity Test Framework](https://github.com/ThrowTheSwitch/Unity) at `lib/unity/`.
 
 Here's a look at the structure of tests:
 * **White Box Tests (Unit Tests)**
@@ -177,7 +190,7 @@ Giving us a **total of 32 tests**.
 
 This tool depends on and includes a vendored version of [tomlc17](https://github.com/cktan/tomlc17) by [cktan](https://github.com/cktan).
 
-THere's also a vendored version of the [Unity Test Framework](https://github.com/ThrowTheSwitch/Unity) by [ThrowTheSwitch](https://github.com/ThrowTheSwitch) used for testing.
+There's also a vendored version of the [Unity Test Framework](https://github.com/ThrowTheSwitch/Unity) by [ThrowTheSwitch](https://github.com/ThrowTheSwitch) used for testing.
 
 ---
 
