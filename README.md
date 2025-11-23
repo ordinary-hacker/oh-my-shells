@@ -39,10 +39,10 @@ For a quick overview of what the tool does, how it works, and why it exists, see
 
 ### Commands
 
-- `list` (alias: `l`) — List payloads with optional filters
-- `search <term>` (alias: `sr`) — Search for payloads
-- `show <shell_id>` (alias: `sh`) — Show details about a specific payload
-- `generate <shell_id>` (alias: `g`) — Generate a payload
+- `list` (alias: `l`) - List payloads with optional filters
+- `search <term>` (alias: `sr`) - Search for payloads
+- `show <shell_id>` (alias: `sh`) - Show details about a specific payload
+- `generate <shell_id>` (alias: `g`) - Generate a payload
 
 ### Options
 
